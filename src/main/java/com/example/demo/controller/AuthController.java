@@ -8,7 +8,6 @@ import java.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-// import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -65,7 +64,7 @@ public class AuthController {
         user.setSecurityAnswerHash(
                 passwordEncoder.encode(securityAnswer.trim().toLowerCase()));
 
-        // ✅ STORE KEYS DIRECTLY
+        //  STORE KEYS DIRECTLY
         user.setPublicKey(Base64.getEncoder()
                 .encodeToString(keyPair.getPublic().getEncoded()));
 
@@ -116,7 +115,7 @@ public class AuthController {
         return "redirect:/login";
     }
 
-    // 🔒 CHECK LOCK
+    //  CHECK LOCK
     if (user.getLoginLockedUntil() != null &&
         user.getLoginLockedUntil().isAfter(LocalDateTime.now())) {
 
@@ -163,7 +162,7 @@ public class AuthController {
         return "redirect:/login";
     }
 
-    // ✅ SUCCESS LOGIN
+    // SUCCESS LOGIN
     user.setLoginFailAttempts(0);
     user.setLoginLockedUntil(null);
     userRepository.save(user);
