@@ -15,8 +15,6 @@ import com.example.demo.repository.AdminRepository;
 import com.example.demo.repository.ResetPasswordRequestRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.AdminService;
-// import com.example.demo.service.MailService;
-
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -33,9 +31,6 @@ public class AdminController {
 
     @Autowired
     private ResetPasswordRequestRepository resetRepo;
-
-    // @Autowired
-    // private MailService mailService;
 
     /* ================= ADMIN LOGIN PAGE ================= */
     @GetMapping("/admin-login")
@@ -69,7 +64,7 @@ public class AdminController {
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a");
 
-        // 🔒 LOCK CHECK
+        //  LOCK CHECK
         if (admin.getLockedUntil() != null &&
             admin.getLockedUntil().isAfter(LocalDateTime.now())) {
 
@@ -80,7 +75,7 @@ public class AdminController {
             return "redirect:/admin-login";
         }
 
-        // ❌ WRONG PASSWORD
+        //  WRONG PASSWORD
         if (!adminService.login(email, password)) {
 
             int attempts = admin.getLoginAttempts() + 1;
@@ -105,7 +100,7 @@ public class AdminController {
             return "redirect:/admin-login";
         }
 
-        // ✅ SUCCESS LOGIN
+        //  SUCCESS LOGIN
         admin.setLoginAttempts(0);
         admin.setLockedUntil(null);
         adminRepository.save(admin);
