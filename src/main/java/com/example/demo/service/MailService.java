@@ -50,7 +50,7 @@ public void sendHeatmapMail(
                         StandardCharsets.UTF_8.name()
                 );
 
-        helper.setFrom("calendarheatmap@gmail.com");
+        helper.setFrom("mail"); // admin mail
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(body, false);
@@ -79,7 +79,7 @@ public void sendTextMail(
                         StandardCharsets.UTF_8.name()
                 );
 
-        helper.setFrom("calendarheatmap@gmail.com");
+        helper.setFrom("mail"); //admin mail
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(body, false);
