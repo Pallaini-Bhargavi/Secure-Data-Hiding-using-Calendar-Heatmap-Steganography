@@ -16,7 +16,7 @@ import com.example.demo.entity.ResetPasswordRequest;
 import com.example.demo.entity.User;
 import com.example.demo.repository.ResetPasswordRequestRepository;
 import com.example.demo.repository.UserRepository;
-
+import com.example.demo.service.MailService;
 
 @RestController
 @RequestMapping("/api")
@@ -28,8 +28,8 @@ public class ResetPasswordApiController {
     @Autowired
     private ResetPasswordRequestRepository resetRepo;
 
-    // @Autowired
-    // private MailService mailService;
+    @Autowired
+    private MailService mailService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -44,7 +44,7 @@ public class ResetPasswordApiController {
                 new RuntimeException("Email not registered")
             );
 
-    // 🔒 1. HARD BLOCK IF RESET LOCKED
+    //  1. HARD BLOCK IF RESET LOCKED
     if (user.getResetLockedUntil() != null &&
         user.getResetLockedUntil().isAfter(LocalDateTime.now())) {
 
@@ -57,14 +57,14 @@ public class ResetPasswordApiController {
         );
     }
 
-    // 🚫 2. BLOCK IF PENDING REQUEST EXISTS
+    //  2. BLOCK IF PENDING REQUEST EXISTS
     if (resetRepo.existsByEmailAndStatus(email, "PENDING")) {
         return ResponseEntity.badRequest().body(
             "A reset request is already pending."
         );
     }
 
-    // ❌ 3. WRONG SECURITY ANSWER
+    //  3. WRONG SECURITY ANSWER
     if (!passwordEncoder.matches(dto.getAnswer(),
             user.getSecurityAnswerHash())) {
 
@@ -85,7 +85,7 @@ public class ResetPasswordApiController {
             Math.max(0, 3 - attempts)
         );
     }
-    // ✅ 4. SUCCESS → CREATE ADMIN APPROVAL REQUEST
+    //  4. SUCCESS → CREATE ADMIN APPROVAL REQUEST
     ResetPasswordRequest req = new ResetPasswordRequest();
     req.setEmail(email);
     req.setNewPasswordHash(
@@ -96,7 +96,21 @@ public class ResetPasswordApiController {
 
     resetRepo.save(req);
 
-    // 🔒 RESET PASSWORD LOCK (USER LEVEL)
+    //  SEND ADMIN MAIL
+try {
+    mailService.sendTextMail(
+        "calendarheatmap@gmail.com",
+        "Password Reset Approval Request",
+        "User with email " + email +
+        " has requested a password reset.\n\n" +
+        "Please login to admin dashboard to approve or reject."
+    );
+} catch (Exception e) {
+    e.printStackTrace();
+}
+
+
+    //  RESET PASSWORD LOCK (USER LEVEL)
 if (user.getResetLockedUntil() != null &&
     user.getResetLockedUntil().isAfter(LocalDateTime.now())) {
 
@@ -106,10 +120,7 @@ if (user.getResetLockedUntil() != null &&
     );
 }
     return ResponseEntity.ok("Approval request sent to admin.");
-
-    
     
 }
-
 
 }
