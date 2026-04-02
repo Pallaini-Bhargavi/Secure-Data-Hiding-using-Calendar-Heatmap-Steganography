@@ -4,7 +4,7 @@
 
 This project implements a **secure data hiding and authentication system** using **Calendar Heatmap Steganography** combined with **strong user authentication and admin-controlled password reset workflows**. The system is designed with multiple security layers to prevent unauthorized access, brute-force attacks, and misuse of password reset functionality.
 
-The application is built using **Spring Boot**, **Thymeleaf**, **JPA/Hibernate**, and **MySQL**, and follows clean MVC architecture.
+The application is built using **Spring Boot**, **Thymeleaf**, **JPA/Hibernate**, and **PostgreSQL**, and follows clean MVC architecture.
 
 ---
 
@@ -12,8 +12,7 @@ The application is built using **Spring Boot**, **Thymeleaf**, **JPA/Hibernate**
 
 * **Frontend**: HTML, CSS, JavaScript, Thymeleaf
 * **Backend**: Spring Boot (REST + MVC Controllers)
-* **Database**: MySQL
-* **Security**:
+* **Database**: PostgreSQL
 
   * Password hashing (BCrypt)
   * Session-based authentication
@@ -144,7 +143,7 @@ The system implements **three independent security flows**, each with its own at
 * Spring Security (PasswordEncoder)
 * Spring Data JPA
 * Thymeleaf
-* MySQL
+* PostgreSQL
 * Maven
 
 ---
