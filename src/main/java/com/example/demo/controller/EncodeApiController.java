@@ -120,7 +120,7 @@ System.out.println("\n===== PERFORMANCE METRICS =====");
 System.out.println("MESSAGE SIZE (KB): " + messageKB);
 System.out.println("HEATMAP SIZE (KB): " + heatmapKB);
 System.out.println("ENCODING TIME (ms): " + encodingTime);
-System.out.println("===== ENCODING DONE =====");
+System.out.println("===== ENCODING DONE =====\n");
 
     return ResponseEntity
             .ok()
