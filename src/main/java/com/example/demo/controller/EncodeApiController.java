@@ -129,14 +129,11 @@ System.out.println("===== ENCODING DONE =====");
 }
 
 @PostMapping("/send")
-public ResponseEntity<?> sendHeatmap(HttpSession session) throws Exception {
+public ResponseEntity<?> sendHeatmap(HttpSession session) {
 
-    byte[] png =
-            (byte[]) session.getAttribute("PREVIEW_HEATMAP");
-    String receiverEmail =
-            (String) session.getAttribute("PREVIEW_RECEIVER");
-    String senderEmail =
-            (String) session.getAttribute("USER_EMAIL");
+    byte[] png = (byte[]) session.getAttribute("PREVIEW_HEATMAP");
+    String receiverEmail = (String) session.getAttribute("PREVIEW_RECEIVER");
+    String senderEmail = (String) session.getAttribute("USER_EMAIL");
 
     if (png == null || receiverEmail == null) {
         return ResponseEntity
@@ -144,25 +141,30 @@ public ResponseEntity<?> sendHeatmap(HttpSession session) throws Exception {
                 .body("No heatmap to send.");
     }
 
-    // ✅ receiver → image
-    mailService.sendHeatmapMail(
-            receiverEmail,
-            "You received a secure heatmap",
-            "You have received a secure calendar heatmap image.",
-            png
-    );
+    try {
+        // receiver mail
+        mailService.sendHeatmapMail(
+                receiverEmail,
+                "You received a secure heatmap",
+                "You have received a secure calendar heatmap image.",
+                png
+        );
 
-    // ✅ sender → TEXT ONLY
-    mailService.sendTextMail(
-            senderEmail,
-            "Heatmap sent successfully",
-            "Your heatmap was successfully sent to " + receiverEmail
-    );
+        // sender mail
+        mailService.sendTextMail(
+                senderEmail,
+                "Heatmap sent successfully",
+                "Your heatmap was successfully sent to " + receiverEmail
+        );
+
+    } catch (Exception e) {
+        System.out.println("Mail failed: " + e.getMessage());
+    }
 
     // cleanup
     session.removeAttribute("PREVIEW_HEATMAP");
     session.removeAttribute("PREVIEW_RECEIVER");
-    
-    return ResponseEntity.ok().build();
+
+    return ResponseEntity.ok("Process completed (mail may or may not be sent)");
 }
 }
