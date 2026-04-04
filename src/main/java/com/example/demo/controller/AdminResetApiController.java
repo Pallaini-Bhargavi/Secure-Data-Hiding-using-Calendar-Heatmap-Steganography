@@ -63,7 +63,7 @@ if (attempts >= 3) {
 
     resetRepo.save(req); 
 
-    mailService.send(
+    mailService.sendTextMail(
         req.getEmail(),
         "Password Reset Approved",
         "Your password reset request has been approved."
@@ -100,7 +100,7 @@ if (attempts >= 3) {
 
 req.setActionTakenAt(LocalDateTime.now());
 resetRepo.save(req);   
-    mailService.send(
+    mailService.sendTextMail(
         req.getEmail(),
         "Password Reset Rejected",
         "Your password reset request has been rejected."
