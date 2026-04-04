@@ -89,7 +89,7 @@ public class AdminController {
 
     //  SEND MAIL FOR EVERY WRONG ATTEMPT
 try {
-    mailService.sendTextMail((
+    mailService.sendTextMail(
         admin.getEmail(),
         "⚠️ Security Alert: Suspicious Login Attempt",
         """
